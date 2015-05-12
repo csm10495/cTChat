@@ -1,0 +1,60 @@
+/*
+This file is part of cTChat
+cTChat - A simple text chat solution, written in Node.js
+This is the CSS for the chat client
+(C) Charles Machalow under the MIT License
+*/
+
+ul { 
+	list-style: none;
+	padding: 0;
+}
+
+#chat {
+	color: #000000;
+	overflow-y: auto;
+	overflow-x: auto;
+	max-height: 92%;
+	font-family: "Lucida Console", Monaco, monospace;
+}
+
+li:nth-child(odd) { 
+	background: #fcc;
+}
+
+li:nth-child(even) {
+	background: #fff;
+}
+
+#inputbox {
+	width: 100%;
+}
+
+.username {
+	color: grey;
+	display: inline;
+}
+
+#senddiv {
+	overflow: hidden;
+	padding-right: .5em;
+}
+
+#send {
+	float: right;
+}
+
+#controls {
+	height: 25px;
+}
+
+.status {
+	font-style: italic;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+}
+
+#reconnect {
+	color: #0000ff;
+	text-decoration: underline;
+|

@@ -1,0 +1,28 @@
+<!--
+This file is part of cTChat
+cTChat - A simple text chat solution, written in Node.js
+This is the HTML for the chat client
+(C) Charles Machalow under the MIT License
+-->
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> 
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<script src="ctchat_client.js"></script>
+	</head>
+	
+	<body>
+	
+		<ul id=chat>
+		</ul>
+	
+		<div id="controls">
+			<button type="button" id="send" disabled>Send</button>
+			<div id="senddiv">
+				<input id="inputbox"></input>
+			</div>
+			<span class="status" id="status">Not Connected</span><a id="reconnect" class="status" onclick="location.reload()" hidden> ...Try to reconnect</span>
+		</div>
+		
+	</body>
+</html>
