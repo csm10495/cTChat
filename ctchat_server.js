@@ -6,7 +6,8 @@ This is Node.js chat server
 */
 
 var express = require('express');
-var ws = require('ws')
+var ws = require('ws');
+var striptags = require('striptags');
 
 var app = express( );
 app.use(express.static('.'));
@@ -50,6 +51,9 @@ ws_server.on('connection', function(clientSocket) {
 	//message recv'd
 	//msg is just the text, need to convert to msg_obj
 	clientSocket.on('message', function(msg) {
+		//strip tags from msg
+		msg = striptags(msg);
+		
 		console.log("forwarded message: " + msg);
 		var msg_obj = new msg_object(new Date(), connection_ip, msg);
 		messages.push(msg_obj);
