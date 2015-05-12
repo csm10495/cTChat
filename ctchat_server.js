@@ -35,6 +35,11 @@ function user_object(Date, ip_addr, name) {
 	this.username = name;
 }
 
+//redirect /ctchat to /ctchat.html
+app.get('/ctchat', function(req, res) {
+	res.redirect("ctchat.html");
+});
+
 //returns json of all the messages
 app.get('/getmessages', function(req, res) {
 	res.set('Content-Type', 'application/json');
