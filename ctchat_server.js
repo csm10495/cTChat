@@ -10,7 +10,7 @@ var ws = require('ws');
 var striptags = require('striptags');
 
 var app = express( );
-app.use(express.static('.'));
+app.use(express.static('public/'));
 var server = app.listen(3000);
 var ws_server = new ws.Server({ port: 3001 });
 
