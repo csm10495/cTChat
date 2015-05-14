@@ -54,7 +54,20 @@ li:nth-child(even) {
 	font-size: 10px;
 }
 
+.bigtext {
+	font-size: 22px;
+	!important;
+}
+
 #reconnect {
 	color: #0000ff;
 	text-decoration: underline;
-|
+}
+
+.center {
+	text-align: center;
+}
+
+.chat {
+	display: none;
+}

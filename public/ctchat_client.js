@@ -37,9 +37,16 @@ $( document ).ready(function() {
 	//signifies if a connection is open to the sock
 	var connection_open = false;
 	
+	//handle keyups in username_input
+	$("#username_input").keyup(function(event) {
+		//handle allowing enter to set username
+		if(event.keyCode == 13 && $("#start").css("display") != "none"){
+			$("#enter_chat").click();
+		}
+	});
 	
-	//hanlde keyups in inputbox
-	$("#inputbox").keyup(function(event){
+	//handle keyups in inputbox
+	$("#inputbox").keyup(function(event) {
 		//handle allowing enter to send the message
 		if(event.keyCode == 13 && !$("#send").prop('disabled')){
 			$("#send").click();
@@ -88,6 +95,15 @@ $( document ).ready(function() {
 		$("#inputbox").val("");
 		$("#send").prop('disabled', true);
 		sock.send(msg);
+	});
+	
+	//click in the username input
+	$("#enter_chat").click(function() {
+		var username = $("#username_input").val();
+		$.post( "/setusername/" + username, function( data ) {
+				$(".chat").css("display", "block");
+				$("#start").css("display", "none");
+		});
 	});
 });
 

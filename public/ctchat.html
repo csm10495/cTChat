@@ -13,10 +13,15 @@ This is the HTML for the chat client
 	
 	<body>
 	
-		<ul id=chat>
-		</ul>
+		<div id="start" class="login center">
+			<p class="status bigtext" id="welcome">Welcome to cTChat, Input a username.</p>
+			<input id="username_input" class="center"placeholder="Username" autofocus></input>
+			<button type="button" id="enter_chat">Enter Chat</button>
+		</div>
+		
+		<ul id="chat" class="chat"></ul>
 	
-		<div id="controls">
+		<div id="controls" class="chat">
 			<button type="button" id="send" disabled>Send</button>
 			<div id="senddiv">
 				<input id="inputbox"></input>
