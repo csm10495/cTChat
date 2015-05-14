@@ -8,7 +8,7 @@ This is the Javascript for the chat client
 //adds a message to the gui from a message object
 function addMessage(msg_obj) {
 	
-	var padded_username = msg_obj.ip + ":";
+	var padded_username = msg_obj.username + ":";
 	padded_username = padRight(padded_username, 20, "&nbsp");
 	
 	var newMessage = "<li><p class=username>" + padded_username + "  </p>" + msg_obj.message + "</li>";
@@ -31,9 +31,18 @@ $( document ).ready(function() {
 	
 	//makes the C++ programmer in me happy
 	main();
-
+	
 	//create the WebSocket
-	var sock = new WebSocket("ws://csm10495.raspctl.com:3001/");
+	var sock = new WebSocket("ws://csm10495.raspctl.com:3001/" + getCookie("guid"));
+	
+	//check to see if username cookie exists
+	var username_from_cookie = getCookie("username");
+	if (username_from_cookie != "") {
+		setUsername(username_from_cookie);
+		$(".chat").css("display", "block");
+		$("#start").css("display", "none");
+	}
+	
 	//signifies if a connection is open to the sock
 	var connection_open = false;
 	
@@ -100,12 +109,34 @@ $( document ).ready(function() {
 	//click in the username input
 	$("#enter_chat").click(function() {
 		var username = $("#username_input").val();
-		$.post( "/setusername/" + username, function( data ) {
-				$(".chat").css("display", "block");
-				$("#start").css("display", "none");
-		});
+		
+		//handle empty username
+		if (username == "") {
+			username = "Anon_" + (new Date()).getTime();
+		}
+		
+		//set username cookie
+		setCookie("username", username, 30);
+		
+		//set on backend
+		setUsername(username);
+		
 	});
 });
+
+//gets a 'unique identifier'
+function getGuid() {
+	return Math.floor((Math.random() * 1000) + 1);
+}
+
+//sets the username on the backend
+function setUsername(username) {
+	//set username on the backend
+	$.post( "/setusername/" + getCookie("guid") + "/" + username + "/", function( data ) {
+			$(".chat").css("display", "block");
+			$("#start").css("display", "none");
+	});
+}
 
 //will call on startup, when ready
 function main() {
@@ -114,10 +145,15 @@ function main() {
 
 	//load existing messages
 	$.get("/getmessages", function( data ) {
-		//console.log(data[0].ip);
 		data.forEach(function(x) {
 			addMessage(x);
 		}); 	
 		scrollChatToBottom();
 	});
+	
+	//make sure guid exists
+	if (getCookie("guid") == 0) {
+		setCookie("guid", getGuid(), 9999);
+	}
+	
 }
