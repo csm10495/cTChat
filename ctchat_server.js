@@ -93,6 +93,7 @@ ws_server.on('connection', function(clientSocket) {
 	clients.forEach(function(x) {
 		if (x.guid == guid && x.ip == connection_ip) {
 			existing_client = true;
+			x.socket = clientSocket;
 			x.online = true;
 		}
 	});
@@ -123,7 +124,7 @@ ws_server.on('connection', function(clientSocket) {
 		clients.forEach(function(x) {
 			//only send if online
 			if (x.online) {
-			x.socket.send(JSON.stringify(msg_obj));
+				x.socket.send(JSON.stringify(msg_obj));
 			}
 		});
 	});
