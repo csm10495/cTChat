@@ -58,6 +58,7 @@ app.post('/setusername/:guid/:username', function(req, res) {
 		}
 	});
 	
+	//should not ever get false
 	res.send(success);
 });
 
@@ -75,7 +76,7 @@ app.get('/getusers', function(req, res) {
 	var users = [];
 	
 	clients.forEach(function(x) {
-			users.push({"username" : x.username, "online" : x.online});
+		users.push({"username" : x.username, "online" : x.online});
 	});
 	
 	res.send(users);
@@ -87,8 +88,19 @@ ws_server.on('connection', function(clientSocket) {
 	console.log("new connection accepted from " + connection_ip);
 	var guid = clientSocket.upgradeReq.url.substring(1);
 	
-	//clients.push(clientSocket);
-	clients.push(new user_object(new Date(), connection_ip, "NAME", clientSocket, true, guid));
+	var existing_client = false;
+	//check if user ip, guid already exists in clients
+	clients.forEach(function(x) {
+		if (x.guid == guid && x.ip == connection_ip) {
+			existing_client = true;
+			x.online = true;
+		}
+	});
+	
+	if (!existing_client) {
+		//clients.push(clientSocket);
+		clients.push(new user_object(new Date(), connection_ip, "NAME", clientSocket, true, guid));
+	}
 	
 	//message recv'd
 	//msg is just the text, need to convert to msg_obj
@@ -96,7 +108,7 @@ ws_server.on('connection', function(clientSocket) {
 		//strip tags from msg
 		msg = striptags(msg);
 		
-		console.log("forwarded message: " + msg);
+		console.log("forwarded message: " + msg + " (" + guid + ")");
 		
 		var sender_name = "Unknown User";
 		
@@ -109,18 +121,21 @@ ws_server.on('connection', function(clientSocket) {
 		var msg_obj = new msg_object(new Date(), sender_name, msg);
 		messages.push(msg_obj);
 		clients.forEach(function(x) {
+			//only send if online
+			if (x.online) {
 			x.socket.send(JSON.stringify(msg_obj));
+			}
 		});
 	});
 
 	//called when connection closed
 	clientSocket.on('close', function() {
-		/* remove socket from the list of clients */
-		for (var i = 0; i < clients.length; i++) {
-			if (clients[i].socket == clientSocket) {
-				clients.splice(i, 1);
-				break;
+		//keep client but set it to not be online
+		clients.forEach(function(x) {
+			if (x.socket == clientSocket) {
+				x.online = false;
 			}
-		}
+		});
+		
 	});
 });

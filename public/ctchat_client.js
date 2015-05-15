@@ -35,14 +35,6 @@ $( document ).ready(function() {
 	//create the WebSocket
 	var sock = new WebSocket("ws://csm10495.raspctl.com:3001/" + getCookie("guid"));
 	
-	//check to see if username cookie exists
-	var username_from_cookie = getCookie("username");
-	if (username_from_cookie != "") {
-		setUsername(username_from_cookie);
-		$(".chat").css("display", "block");
-		$("#start").css("display", "none");
-	}
-	
 	//signifies if a connection is open to the sock
 	var connection_open = false;
 	
@@ -72,6 +64,12 @@ $( document ).ready(function() {
 		//connection is open
 		connection_open = true;
 		$("#status").text("Connected to: " + sock.url);
+		
+		//check to see if username cookie exists
+		var username_from_cookie = getCookie("username");
+		if (username_from_cookie != "") {
+			setUsername(username_from_cookie);
+		}
 	};
 	
 
